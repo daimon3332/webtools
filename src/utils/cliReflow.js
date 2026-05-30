@@ -1,6 +1,7 @@
 import { dedent } from './dedent'
 
 const TERM = /[。！？；.!?;：:]['")\]）」』]*$/
+const FENCE = /^\s*(```|~~~)/
 
 function isCJK(ch) {
   if (!ch) return false
@@ -19,11 +20,12 @@ const indentOf = line => line.match(/^[ \t]*/)[0].length
 function isStructural(line) {
   const t = line.replace(/^\s+/, '')
   return (
-    /^([-*+]\s|\d+[.)]\s|[A-Za-z][.)]\s)/.test(t) || // 列表 / 编号
-    /^#{1,6}\s/.test(t) ||                            // 标题
-    /^\|/.test(t) ||                                  // 表格
-    /^[\w.-]+\s*:(\s|$)/.test(t) ||                   // key: value
-    /^( {4,}|\t)/.test(line)                          // 缩进代码
+    /^([-*+]\s|\d+[.)]\s|[A-Za-z][.)]\s)/.test(t) ||              // 列表 / 编号
+    /^#{1,6}\s/.test(t) ||                                        // 标题
+    /^\|/.test(t) ||                                              // 表格
+    /^[\w.-]+\s*:(\s|$)/.test(t) ||                              // key: value（半角）
+    /^[^\s。！？：:；][^。！？：:；]{0,39}[：:](?![\\/:])\s*\S/.test(t) || // 标签：值（排除 URL / 盘符路径 / 双冒号）
+    /^( {4,}|\t)/.test(line)                                      // 缩进代码
   )
 }
 
@@ -39,13 +41,26 @@ function joinTwo(a, b) {
 }
 
 export function reflowCli(input, { join = true } = {}) {
-  const lines = dedent(input).split('\n')
-  if (!join) return lines.join('\n')
+  const dedented = dedent(input).split('\n')
+  if (!join) return dedented.join('\n')
 
+  // 归一化：去除终端复制残留的行首细缩进（保留围栏内容 / 列表 / 代码块 / 结构行）
+  const lines = []
+  let fence = false
+  for (const line of dedented) {
+    if (FENCE.test(line)) {
+      fence = !fence
+      lines.push(line)
+      continue
+    }
+    lines.push(fence || isStructural(line) ? line : line.replace(/^[ \t]+/, ''))
+  }
+
+  // 合并终端软换行
   const out = []
   let inFence = false
   for (const line of lines) {
-    if (/^\s*(```|~~~)/.test(line)) {
+    if (FENCE.test(line)) {
       inFence = !inFence
       out.push(line)
       continue
@@ -56,7 +71,7 @@ export function reflowCli(input, { join = true } = {}) {
       prev.trim() !== '' &&
       line.trim() !== '' &&
       !inFence &&
-      !/^\s*(```|~~~)/.test(prev) &&
+      !FENCE.test(prev) &&
       !TERM.test(prev.replace(/\s+$/, '')) &&
       !isStructural(line) &&
       indentOf(line) >= indentOf(prev)

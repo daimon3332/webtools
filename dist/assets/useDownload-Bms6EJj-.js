@@ -1,1 +1,0 @@
-function a(){function n(o,c,d="text/plain"){const l=o instanceof Blob?o:new Blob([o],{type:d}),t=URL.createObjectURL(l),e=document.createElement("a");e.href=t,e.download=c,document.body.appendChild(e),e.click(),document.body.removeChild(e),setTimeout(()=>URL.revokeObjectURL(t),0)}return{download:n}}export{a as u};

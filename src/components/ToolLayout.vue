@@ -1,7 +1,8 @@
 <script setup>
 defineProps({
   title: String,
-  desc: String
+  desc: String,
+  stacked: { type: Boolean, default: false }
 })
 </script>
 
@@ -19,8 +20,11 @@ defineProps({
 
     <slot name="status" />
 
-    <div class="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-2">
-      <section class="flex min-h-0 flex-col border-line max-md:border-b md:border-r">
+    <div
+      class="grid min-h-0 flex-1 grid-cols-1"
+      :class="stacked ? 'grid-rows-[minmax(170px,0.42fr)_minmax(0,1fr)]' : 'md:grid-cols-2'"
+    >
+      <section class="flex min-h-0 flex-col border-line" :class="stacked ? 'border-b' : 'max-md:border-b md:border-r'">
         <div class="flex items-center justify-between gap-2 border-b border-line bg-canvas px-3 py-1.5 text-xs font-medium text-ink-soft">
           <slot name="left-label">输入</slot>
         </div>

@@ -13,6 +13,7 @@
 | **curl 多行转单行** | 去除 `\` 续行符，保留引号内空格 |
 | **PowerShell 多行转单行** | 去除反引号续行符，逻辑同上 |
 | **Base64 转图片** | 魔数嗅探 + MIME 白名单（PNG/JPEG/GIF/WebP），Blob URL 预览与下载 |
+| **GitHub 镜像转换** | gh-proxy 等普通代理前缀转换，jsDelivr / jsDelivr-CF 单独转换仓库文件路径 |
 | **URL 编码 / 解码** | 基于 `encodeURIComponent`，自动处理中文与特殊字符 |
 
 ## 技术栈
@@ -35,7 +36,7 @@ src/
 ├─ components/      # EditorPane(懒加载 CodeEditor) / ToolLayout / 导航等通用组件
 ├─ composables/     # useClipboard / useDownload
 ├─ utils/           # 纯逻辑：cliReflow / cmdJoin / base64 / yaml / json / url / dedent
-├─ views/           # 8 个工具页面
+├─ views/           # 9 个工具页面
 └─ router/          # 路由 + 导航元信息
 ```
 

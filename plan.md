@@ -1,3 +1,29 @@
+# GitHub 镜像转换实施计划
+
+## 范围
+
+新增独立工具页 `GitHub 镜像转换`，复用现有 WebTools 双栏布局、按钮、状态条与导航风格，不改动现有工具行为。
+
+## 转换规则
+
+1. 支持用户输入 GitHub 仓库、仓库文件、raw 文件、release asset 链接。
+2. 支持勾选代理源，默认勾选 `gh-proxy.com` 和 `jsDelivr`。
+3. 普通代理按 `https://proxy/${URL_RAW}` 生成：`gh-proxy.com`、`ghproxy.net`、`ghfast.top`。
+4. `jsDelivr` 单独转换为 `https://cdn.jsdelivr.net/gh/{owner}/{repo}@{version}/{path}`。
+5. `jsDelivr-CF` 单独转换为 `https://testingcf.jsdelivr.net/gh/{owner}/{repo}@{version}/{path}`。
+6. 输出顺序固定为：`gh-proxy.com` 最前，其他普通代理居中，`jsDelivr` 与 `jsDelivr-CF` 最后。
+7. release asset 生成 jsDelivr 仓库文件候选链接，并提示该链接依赖文件实际存在于对应分支或 tag。
+
+## 实施步骤
+
+1. 新增 `src/utils/githubMirror.js`，放置代理定义、GitHub URL 解析与转换纯函数。
+2. 新增 `src/views/GithubMirrorView.vue`，实现输入、代理勾选、复制、示例、清空与输出。
+3. 更新 `src/router/index.js`，加入 `GitHub 镜像转换` 路由与导航。
+4. 更新 `README.md` 功能表。
+5. 运行 `npm run build`，并用实际网络请求验证仓库文件与 release asset 链接可下载。
+
+---
+
 # WebTools 在线开发者工具聚合 — 技术方案与实施计划
 
 > json.cn 风格的前端开发者工具聚合 SPA：顶部导航栏 + 左输入/右输出双栏，浅蓝/绿色简洁风格。纯前端、零后端、静态托管。

@@ -24,12 +24,42 @@ function base64ToBytes(b64) {
   return bytes
 }
 
+function bytesToBase64(bytes) {
+  let bin = ''
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
+  }
+  return btoa(bin)
+}
+
+function normalizeBase64(input) {
+  const raw = input.replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/')
+  return raw + '='.repeat((4 - (raw.length % 4)) % 4)
+}
+
+export function encodeBase64Text(text) {
+  return bytesToBase64(new TextEncoder().encode(text))
+}
+
+export function decodeBase64Text(input) {
+  let bytes
+  try {
+    bytes = base64ToBytes(normalizeBase64(input))
+  } catch {
+    throw new Error('Base64 解码失败，请检查输入是否完整')
+  }
+  try {
+    return new TextDecoder('utf-8', { fatal: true }).decode(bytes)
+  } catch {
+    throw new Error('解码失败：内容不是有效的 UTF-8 文本')
+  }
+}
+
 export function decodeBase64Image(input) {
   const raw = input.trim()
   if (!raw) throw new Error('请输入 Base64 内容')
   const match = raw.match(/^data:([\w./+-]+)?;base64,(.*)$/is)
-  let b64 = (match ? match[2] : raw).replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/')
-  b64 += '='.repeat((4 - (b64.length % 4)) % 4)
+  const b64 = normalizeBase64(match ? match[2] : raw)
 
   let bytes
   try {

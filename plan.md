@@ -1,3 +1,17 @@
+# Base64 编解码实施计划
+
+## 范围
+
+新增独立 `Base64 编解码` 文本工具，使用左右排版，不合并到 `Base64 转图片`。
+
+## 实施步骤
+
+1. 扩展 `src/utils/base64.js`，新增 UTF-8 文本 Base64 编码、解码函数。
+2. 新增 `src/views/Base64TextView.vue`，复用现有工具页结构，提供编码 / 解码、复制、分栏切换、示例、清空。
+3. 更新 `src/router/index.js`，新增 `/base64` 路由，保留 `/base64-image`。
+4. 更新 `README.md` 功能表和工具数量。
+5. 运行 `npm run build`，再基于 diff 做 code review。
+
 # Shell 转单行实施计划
 
 ## 范围

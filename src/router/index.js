@@ -8,6 +8,7 @@ const routes = [
   { path: '/html', name: 'html', meta: { title: 'HTML 渲染' }, component: () => import('../views/HtmlView.vue') },
   { path: '/curl', name: 'curl', meta: { title: 'Shell转单行' }, component: () => import('../views/CurlView.vue') },
   { path: '/powershell', name: 'powershell', meta: { title: 'PowerShell 转单行' }, component: () => import('../views/PowershellView.vue') },
+  { path: '/base64', name: 'base64', meta: { title: 'Base64 编解码' }, component: () => import('../views/Base64TextView.vue') },
   { path: '/base64-image', name: 'base64-image', meta: { title: 'Base64 转图片' }, component: () => import('../views/Base64ImageView.vue') },
   { path: '/github-mirror', name: 'github-mirror', meta: { title: 'GitHub 镜像转换' }, component: () => import('../views/GithubMirrorView.vue') },
   { path: '/url', name: 'url', meta: { title: 'URL 编解码' }, component: () => import('../views/UrlView.vue') }

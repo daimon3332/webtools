@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import ToolLayout from '../components/ToolLayout.vue'
 import EditorPane from '../components/EditorPane.vue'
 import ToolButton from '../components/ToolButton.vue'
+import PanelViewButtons from '../components/PanelViewButtons.vue'
 import ResultStatus from '../components/ResultStatus.vue'
 import { useClipboard } from '../composables/useClipboard'
 import { reflowCli } from '../utils/cliReflow'
@@ -16,6 +17,7 @@ const SAMPLE = `  这个工具不是前端 UI 库，也不是组件库。它是�
 const input = ref('')
 const output = ref('')
 const join = ref(true)
+const panelView = ref('split')
 const status = ref({ type: '', message: '' })
 const { copy } = useClipboard()
 
@@ -40,12 +42,13 @@ async function doCopy() {
 </script>
 
 <template>
-  <ToolLayout title="CLI 排版" desc="清理终端复制的文本：去统一前导缩进、合并被换行截断的行（列表 / 代码 / 表格自动保留）">
+  <ToolLayout stacked resizable :view-mode="panelView" title="CLI 排版" desc="清理终端复制的文本：去统一前导缩进、合并被换行截断的行（列表 / 代码 / 表格自动保留）">
     <template #toolbar>
       <label class="flex items-center gap-1.5 text-sm text-ink-soft">
         <input v-model="join" type="checkbox" class="accent-primary" /> 合并换行
       </label>
       <ToolButton @click="doCopy">复制</ToolButton>
+      <PanelViewButtons v-model="panelView" />
       <ToolButton @click="input = SAMPLE">示例</ToolButton>
       <ToolButton @click="clear">清空</ToolButton>
     </template>
@@ -59,7 +62,7 @@ async function doCopy() {
     </template>
 
     <template #right>
-      <EditorPane :model-value="output" readonly placeholder="整理后的文本…" />
+      <EditorPane v-model="output" placeholder="整理后的文本…" />
     </template>
   </ToolLayout>
 </template>

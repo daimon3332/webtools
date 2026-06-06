@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import ToolLayout from '../components/ToolLayout.vue'
 import EditorPane from '../components/EditorPane.vue'
 import ToolButton from '../components/ToolButton.vue'
+import PanelViewButtons from '../components/PanelViewButtons.vue'
 import ResultStatus from '../components/ResultStatus.vue'
 import { useClipboard } from '../composables/useClipboard'
 import { useDownload } from '../composables/useDownload'
@@ -21,6 +22,7 @@ const SAMPLE = `  rule-providers:
 
 const input = ref('')
 const output = ref('')
+const panelView = ref('split')
 const status = ref({ type: '', message: '' })
 const { copy } = useClipboard()
 const { download } = useDownload()
@@ -54,13 +56,19 @@ function doDownload() {
 </script>
 
 <template>
-  <ToolLayout title="YAML 格式化" desc="美化 YAML、YAML⇄JSON 互转（自动去除 CLI 复制的多余缩进）">
+  <ToolLayout
+    resizable
+    :view-mode="panelView"
+    title="YAML 格式化"
+    desc="美化 YAML、YAML⇄JSON 互转（自动去除 CLI 复制的多余缩进）"
+  >
     <template #toolbar>
       <ToolButton variant="primary" @click="doFormat">格式化</ToolButton>
       <ToolButton @click="doToJson">YAML→JSON</ToolButton>
       <ToolButton @click="doToYaml">JSON→YAML</ToolButton>
       <ToolButton @click="doCopy">复制</ToolButton>
       <ToolButton @click="doDownload">下载</ToolButton>
+      <PanelViewButtons v-model="panelView" />
       <ToolButton @click="input = SAMPLE">示例</ToolButton>
       <ToolButton @click="clear">清空</ToolButton>
     </template>
@@ -74,7 +82,7 @@ function doDownload() {
     </template>
 
     <template #right>
-      <EditorPane :model-value="output" mode="code" lang="yaml" readonly placeholder="结果…" />
+      <EditorPane v-model="output" mode="code" lang="yaml" placeholder="结果…" />
     </template>
   </ToolLayout>
 </template>

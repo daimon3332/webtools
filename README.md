@@ -10,7 +10,7 @@
 | **YAML 格式化** | 格式化、YAML ↔ JSON 互转，自动消除 CLI 复制带入的多余缩进 |
 | **CLI 排版** | 去公共缩进 + 合并终端换行；句末终止符（。！？.!?）同级不合并，未结句自动续接，CJK/ASCII 智能空格 |
 | **HTML 渲染** | 左代码 / 右实时预览，沙箱 `iframe` 隔离 |
-| **curl 多行转单行** | 去除 `\` 续行符，保留引号内空格 |
+| **Shell转单行** | 去除 bash / zsh / fish / curl 常见命令的 `\` 续行符，合并为单行 |
 | **PowerShell 多行转单行** | 去除反引号续行符，逻辑同上 |
 | **Base64 转图片** | 魔数嗅探 + MIME 白名单（PNG/JPEG/GIF/WebP），Blob URL 预览与下载 |
 | **GitHub 镜像转换** | gh-proxy 等普通代理前缀转换，jsDelivr / jsDelivr-CF 单独转换仓库文件路径 |

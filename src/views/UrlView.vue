@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import ToolLayout from '../components/ToolLayout.vue'
 import EditorPane from '../components/EditorPane.vue'
 import ToolButton from '../components/ToolButton.vue'
+import PanelViewButtons from '../components/PanelViewButtons.vue'
 import ResultStatus from '../components/ResultStatus.vue'
 import { useClipboard } from '../composables/useClipboard'
 import { encodeUrl, decodeUrl } from '../utils/url'
@@ -10,6 +11,7 @@ import { encodeUrl, decodeUrl } from '../utils/url'
 const input = ref('')
 const output = ref('')
 const mode = ref('encode')
+const panelView = ref('split')
 const status = ref({ type: '', message: '' })
 const { copy } = useClipboard()
 
@@ -46,13 +48,14 @@ const seg = 'rounded px-3 py-1 text-sm transition'
 </script>
 
 <template>
-  <ToolLayout title="URL 编码 / 解码" desc="基于 encodeURIComponent / decodeURIComponent，自动处理中文与特殊字符">
+  <ToolLayout stacked resizable :view-mode="panelView" title="URL 编码 / 解码" desc="基于 encodeURIComponent / decodeURIComponent，自动处理中文与特殊字符">
     <template #toolbar>
       <div class="flex rounded-md border border-line p-0.5">
         <button :class="[seg, mode === 'encode' ? 'bg-primary text-white' : 'text-ink-soft']" @click="mode = 'encode'">编码</button>
         <button :class="[seg, mode === 'decode' ? 'bg-primary text-white' : 'text-ink-soft']" @click="mode = 'decode'">解码</button>
       </div>
       <ToolButton @click="doCopy">复制</ToolButton>
+      <PanelViewButtons v-model="panelView" />
       <ToolButton @click="setSample">示例</ToolButton>
       <ToolButton @click="clear">清空</ToolButton>
     </template>
@@ -66,7 +69,7 @@ const seg = 'rounded px-3 py-1 text-sm transition'
     </template>
 
     <template #right>
-      <EditorPane :model-value="output" readonly placeholder="结果…" />
+      <EditorPane v-model="output" placeholder="结果…" />
     </template>
   </ToolLayout>
 </template>

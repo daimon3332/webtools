@@ -3,9 +3,10 @@ import { ref, watch } from 'vue'
 import ToolLayout from '../components/ToolLayout.vue'
 import EditorPane from '../components/EditorPane.vue'
 import ToolButton from '../components/ToolButton.vue'
+import PanelViewButtons from '../components/PanelViewButtons.vue'
 import ResultStatus from '../components/ResultStatus.vue'
 import { useClipboard } from '../composables/useClipboard'
-import { joinCurl } from '../utils/cmdJoin'
+import { joinShell } from '../utils/cmdJoin'
 
 const SAMPLE = `curl -X POST https://api.example.com/v1/login \\
   -H "Content-Type: application/json" \\
@@ -14,6 +15,7 @@ const SAMPLE = `curl -X POST https://api.example.com/v1/login \\
 
 const input = ref('')
 const output = ref('')
+const panelView = ref('split')
 const status = ref({ type: '', message: '' })
 const { copy } = useClipboard()
 
@@ -23,7 +25,7 @@ function run() {
     status.value = { type: '', message: '' }
     return
   }
-  output.value = joinCurl(input.value)
+  output.value = joinShell(input.value)
   status.value = { type: 'success', message: '已转换为单行命令' }
 }
 watch(input, run)
@@ -38,9 +40,10 @@ async function doCopy() {
 </script>
 
 <template>
-  <ToolLayout title="curl 多行转单行" desc="移除行尾 \ 续行符并合并为一行（按行处理，不解析引号 / 注释 / heredoc）">
+  <ToolLayout stacked resizable :view-mode="panelView" title="Shell转单行" desc="移除行尾 \ 续行符并合并为一行，适用于 bash / zsh / fish / curl 常见多行命令（按行处理，不解析引号 / 注释 / heredoc）">
     <template #toolbar>
       <ToolButton @click="doCopy">复制</ToolButton>
+      <PanelViewButtons v-model="panelView" />
       <ToolButton @click="input = SAMPLE">示例</ToolButton>
       <ToolButton @click="clear">清空</ToolButton>
     </template>
@@ -50,11 +53,11 @@ async function doCopy() {
     </template>
 
     <template #left>
-      <EditorPane v-model="input" placeholder="粘贴多行 curl 命令…" />
+      <EditorPane v-model="input" placeholder="粘贴多行 Shell 命令…" />
     </template>
 
     <template #right>
-      <EditorPane :model-value="output" readonly placeholder="单行命令…" />
+      <EditorPane v-model="output" placeholder="单行命令…" />
     </template>
   </ToolLayout>
 </template>

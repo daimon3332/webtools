@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import ToolLayout from '../components/ToolLayout.vue'
 import EditorPane from '../components/EditorPane.vue'
 import ToolButton from '../components/ToolButton.vue'
+import PanelViewButtons from '../components/PanelViewButtons.vue'
 
 const SAMPLE = `<!DOCTYPE html>
 <html>
@@ -22,6 +23,7 @@ const SAMPLE = `<!DOCTYPE html>
 
 const input = ref('')
 const srcdoc = ref('')
+const panelView = ref('split')
 function run() {
   srcdoc.value = input.value
 }
@@ -33,9 +35,10 @@ function clear() {
 </script>
 
 <template>
-  <ToolLayout title="HTML 渲染" desc="左侧编写 HTML，右侧沙箱实时预览（iframe 已隔离，无法访问父页面）">
+  <ToolLayout resizable :view-mode="panelView" title="HTML 渲染" desc="左侧编写 HTML，右侧沙箱实时预览（iframe 已隔离，无法访问父页面）">
     <template #toolbar>
       <ToolButton variant="primary" @click="run">运行</ToolButton>
+      <PanelViewButtons v-model="panelView" />
       <ToolButton @click="input = SAMPLE">示例</ToolButton>
       <ToolButton @click="clear">清空</ToolButton>
     </template>

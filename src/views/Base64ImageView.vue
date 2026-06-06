@@ -3,11 +3,13 @@ import { ref, watch, onBeforeUnmount } from 'vue'
 import ToolLayout from '../components/ToolLayout.vue'
 import EditorPane from '../components/EditorPane.vue'
 import ToolButton from '../components/ToolButton.vue'
+import PanelViewButtons from '../components/PanelViewButtons.vue'
 import ResultStatus from '../components/ResultStatus.vue'
 import { decodeBase64Image } from '../utils/base64'
 
 const input = ref('')
 const image = ref(null)
+const panelView = ref('split')
 const status = ref({ type: '', message: '' })
 
 const checker = {
@@ -63,9 +65,10 @@ onBeforeUnmount(revoke)
 </script>
 
 <template>
-  <ToolLayout title="Base64 转图片" desc="粘贴 Base64 或 data URL，自动识别格式并预览（仅 PNG / JPEG / GIF / WebP）">
+  <ToolLayout resizable :view-mode="panelView" title="Base64 转图片" desc="粘贴 Base64 或 data URL，自动识别格式并预览（仅 PNG / JPEG / GIF / WebP）">
     <template #toolbar>
       <ToolButton variant="primary" :disabled="!image" @click="doDownload">下载图片</ToolButton>
+      <PanelViewButtons v-model="panelView" />
       <ToolButton @click="clear">清空</ToolButton>
     </template>
 

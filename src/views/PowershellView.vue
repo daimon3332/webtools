@@ -3,6 +3,7 @@ import { ref, watch } from 'vue'
 import ToolLayout from '../components/ToolLayout.vue'
 import EditorPane from '../components/EditorPane.vue'
 import ToolButton from '../components/ToolButton.vue'
+import PanelViewButtons from '../components/PanelViewButtons.vue'
 import ResultStatus from '../components/ResultStatus.vue'
 import { useClipboard } from '../composables/useClipboard'
 import { joinPowershell } from '../utils/cmdJoin'
@@ -15,6 +16,7 @@ const SAMPLE = `Invoke-RestMethod \`
 
 const input = ref('')
 const output = ref('')
+const panelView = ref('split')
 const status = ref({ type: '', message: '' })
 const { copy } = useClipboard()
 
@@ -39,9 +41,10 @@ async function doCopy() {
 </script>
 
 <template>
-  <ToolLayout title="PowerShell 多行转单行" desc="移除行尾反引号续行符并合并为一行（按行处理，不解析引号 / here-string）">
+  <ToolLayout stacked resizable :view-mode="panelView" title="PowerShell 多行转单行" desc="移除行尾反引号续行符并合并为一行（按行处理，不解析引号 / here-string）">
     <template #toolbar>
       <ToolButton @click="doCopy">复制</ToolButton>
+      <PanelViewButtons v-model="panelView" />
       <ToolButton @click="input = SAMPLE">示例</ToolButton>
       <ToolButton @click="clear">清空</ToolButton>
     </template>
@@ -55,7 +58,7 @@ async function doCopy() {
     </template>
 
     <template #right>
-      <EditorPane :model-value="output" readonly placeholder="单行命令…" />
+      <EditorPane v-model="output" placeholder="单行命令…" />
     </template>
   </ToolLayout>
 </template>

@@ -5,6 +5,7 @@ import 'vue-json-pretty/lib/styles.css'
 import ToolLayout from '../components/ToolLayout.vue'
 import EditorPane from '../components/EditorPane.vue'
 import ToolButton from '../components/ToolButton.vue'
+import PanelViewButtons from '../components/PanelViewButtons.vue'
 import ResultStatus from '../components/ResultStatus.vue'
 import { useClipboard } from '../composables/useClipboard'
 import { useDownload } from '../composables/useDownload'
@@ -16,6 +17,7 @@ const input = ref('')
 const output = ref('')
 const tree = shallowRef(null)
 const view = ref('text')
+const panelView = ref('split')
 const status = ref({ type: '', message: '' })
 const { copy } = useClipboard()
 const { download } = useDownload()
@@ -52,12 +54,18 @@ const tabBase = 'rounded px-2 py-0.5 text-xs transition'
 </script>
 
 <template>
-  <ToolLayout title="JSON 格式化" desc="解析 / 格式化 / 压缩，支持树形查看（自动兼容 CLI 复制的缩进）">
+  <ToolLayout
+    resizable
+    :view-mode="panelView"
+    title="JSON 格式化"
+    desc="解析 / 格式化 / 压缩，支持树形查看（自动兼容 CLI 复制的缩进）"
+  >
     <template #toolbar>
       <ToolButton variant="primary" @click="doFormat">格式化</ToolButton>
       <ToolButton @click="doMinify">压缩</ToolButton>
       <ToolButton @click="doCopy">复制</ToolButton>
       <ToolButton @click="doDownload">下载</ToolButton>
+      <PanelViewButtons v-model="panelView" />
       <ToolButton @click="input = SAMPLE">示例</ToolButton>
       <ToolButton @click="clear">清空</ToolButton>
     </template>
@@ -79,7 +87,7 @@ const tabBase = 'rounded px-2 py-0.5 text-xs transition'
     </template>
 
     <template #right>
-      <EditorPane v-if="view === 'text'" :model-value="output" mode="code" lang="json" readonly placeholder="格式化结果…" />
+      <EditorPane v-if="view === 'text'" v-model="output" mode="code" lang="json" placeholder="格式化结果…" />
       <div v-else class="h-full overflow-auto p-3">
         <VueJsonPretty v-if="tree !== null" :data="tree" :deep="3" show-length show-line />
         <p v-else class="text-sm text-ink-soft">点击「格式化」后查看树形结构</p>

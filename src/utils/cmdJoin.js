@@ -8,5 +8,6 @@ function joinCommand(input, cont) {
   return parts.join(' ')
 }
 
-export const joinCurl = input => joinCommand(input, '\\')
+export const joinShell = input => joinCommand(input, '\\')
+export const joinCurl = joinShell
 export const joinPowershell = input => joinCommand(input, '`')

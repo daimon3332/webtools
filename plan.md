@@ -1,3 +1,31 @@
+# 前端技术栈说明文档实施计划
+
+## 范围
+
+新增 `FRONTEND_TECH_STACK.md`，按当前项目真实情况说明前端技术栈。不修改业务代码。
+
+## 实施步骤
+
+1. 说明核心技术栈：Vite、Vue 3、JavaScript、Vue Router、Tailwind CSS。
+2. 说明项目未使用 Ant Design、Element Plus、Naive UI、shadcn/ui 等 UI 组件库。
+3. 说明 CodeMirror、js-yaml、vue-json-pretty、浏览器原生 API 的用途。
+4. 说明目录结构、构建输出和静态部署形态。
+5. 写入后运行构建验证项目不受影响。
+
+# YAML 字段提取实施计划
+
+## 范围
+
+在现有 `YAML 格式化` 页面增加字段提取能力，支持 `tun`、`tun.dns-hijack` 等子字段路径。YAML 原文块优先保留注释和格式；JSON 输入解析后输出 YAML 片段。
+
+## 实施步骤
+
+1. 扩展 `src/utils/yaml.js`，新增 `extractYamlField(text, path)`。
+2. 字段路径支持点分隔子字段；解析校验后优先按原文缩进切片，找不到原文块时用 `js-yaml` 输出字段片段。
+3. 更新 `src/views/YamlView.vue`，增加字段路径输入框和 `提取字段` 按钮。
+4. 更新 YAML 示例和 README 功能说明。
+5. 用 YAML 原文、子字段、JSON 输入验证，再运行 `npm run build` 并做 diff review。
+
 # Base64 编解码实施计划
 
 ## 范围

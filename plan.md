@@ -1,3 +1,15 @@
+# Favicon 实施计划
+
+## 范围
+
+新增网站 favicon，使用当前顶部导航已有的蓝色圆角 `W` 标识风格生成 SVG，不修改业务功能。
+
+## 实施步骤
+
+1. 新增 `public/favicon.svg`，绘制蓝色圆角底和白色加粗 `W`。
+2. 更新 `index.html`，在 `<head>` 中引用 SVG favicon。
+3. 运行 `npm run build` 验证构建。
+
 # 前端技术栈说明文档实施计划
 
 ## 范围

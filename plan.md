@@ -1,3 +1,16 @@
+# CLI 排版规则简化实施计划
+
+## 范围
+
+将 `CLI 排版` 简化为固定规则：每行最多去除开头 2 个普通空格。删除合并换行、结构识别、句末判断、CJK/ASCII 空格等复杂规则。
+
+## 实施步骤
+
+1. 简化 `src/utils/cliReflow.js`，保留 `reflowCli` 导出名，仅按行移除前导 1 到 2 个普通空格。
+2. 更新 `src/views/CliView.vue`，删除 `合并换行` 开关，调整调用和状态文案。
+3. 更新 `README.md` 中 CLI 排版说明。
+4. 用示例验证输出，再运行 `npm run build`。
+
 # Favicon 实施计划
 
 ## 范围

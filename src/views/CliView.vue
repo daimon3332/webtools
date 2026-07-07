@@ -16,7 +16,6 @@ const SAMPLE = `  这个工具不是前端 UI 库，也不是组件库。它是�
 
 const input = ref('')
 const output = ref('')
-const join = ref(true)
 const panelView = ref('split')
 const status = ref({ type: '', message: '' })
 const { copy } = useClipboard()
@@ -27,10 +26,10 @@ function run() {
     status.value = { type: '', message: '' }
     return
   }
-  output.value = reflowCli(input.value, { join: join.value })
-  status.value = { type: 'success', message: join.value ? '已去缩进并合并换行' : '已去除前导缩进' }
+  output.value = reflowCli(input.value)
+  status.value = { type: 'success', message: '已去除每行前导 2 个空格' }
 }
-watch([input, join], run)
+watch(input, run)
 function clear() {
   input.value = ''
   output.value = ''
@@ -42,11 +41,8 @@ async function doCopy() {
 </script>
 
 <template>
-  <ToolLayout stacked resizable :view-mode="panelView" title="CLI 排版" desc="清理终端复制的文本：去统一前导缩进、合并被换行截断的行（列表 / 代码 / 表格自动保留）">
+  <ToolLayout stacked resizable :view-mode="panelView" title="CLI 排版" desc="清理终端复制的文本：每行最多去除开头 2 个空格">
     <template #toolbar>
-      <label class="flex items-center gap-1.5 text-sm text-ink-soft">
-        <input v-model="join" type="checkbox" class="accent-primary" /> 合并换行
-      </label>
       <ToolButton @click="doCopy">复制</ToolButton>
       <PanelViewButtons v-model="panelView" />
       <ToolButton @click="input = SAMPLE">示例</ToolButton>

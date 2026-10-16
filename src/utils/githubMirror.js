@@ -1,5 +1,6 @@
 export const GITHUB_MIRRORS = [
   { id: 'ghfast', name: 'ghfast.top', defaultSelected: true, type: 'prefix', base: 'https://ghfast.top/' },
+  { id: 'gh-proxy', name: 'gh-proxy.com', defaultSelected: false, type: 'prefix', base: 'https://gh-proxy.com/' },
   { id: 'ghproxy', name: 'ghproxy.net', defaultSelected: false, type: 'prefix', base: 'https://ghproxy.net/' },
   { id: 'jsdelivr', name: 'jsDelivr', defaultSelected: true, type: 'jsdelivr', base: 'https://cdn.jsdelivr.net/gh' },
   { id: 'jsdelivr-cf', name: 'jsDelivr-CF', defaultSelected: false, type: 'jsdelivr', base: 'https://testingcf.jsdelivr.net/gh' }
